@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const cellsY = 20;
 
     //initil position
-    const snake = [ [10,10] ];
-
+    const snake = [ [10,10], [11,10] ];
+    let applePosition;
     //initial heading 1 - N, 2 - E, 3 - S, 4 - w
     let direction = 1;
 
@@ -29,21 +29,34 @@ document.addEventListener('DOMContentLoaded', function() {
     function getDirection(e){
         switch(e.keyCode) {
             case 37:
-                direction = 4;
+                if(direction !== 2) direction = 4;
                 break;
             case 38:
-                direction = 1;
+                if(direction !== 3) direction = 1;
                 break;
             case 39:
-                direction = 2;
+                if(direction !== 4) direction = 2;
                 break;
             case 40:
-                direction = 3;
+                if(direction !== 1) direction = 3;
                 break;
         }
     }
 
-    function drowSnake () {
+    function applePositionXY(){
+        return [
+            Math.floor(Math.random()*cellsX),
+            Math.floor(Math.random()*cellsY)
+        ]
+    }
+
+    function addApple(){
+        applePosition = applePositionXY();
+        const apple = document.querySelector(`[data-row='${applePosition[1]}'][data-col='${applePosition[0]}']`);
+        apple.classList.add('apple');
+    }
+
+    function startGame () {
         let snakeHeadX = snake[0][0];
         let snakeHeadY = snake[0][1];
 
@@ -64,22 +77,35 @@ document.addEventListener('DOMContentLoaded', function() {
 }
         let newHead = [snakeHeadX, snakeHeadY];
 
+        //game over if the snake hits the wall
+        if(newHead[0] < 0 || newHead[0] >= cellsX || newHead[1] < 0 || newHead[1] >=cellsY){
+            // function game over to implement
+            location.reload()
+        }
+
         snake.unshift(newHead);
 
-        let lastCell = snake.pop();
-        const snakeLastCell = document.querySelector(`[data-row='${lastCell[1]}'][data-col='${lastCell[0]}']`);
-        snakeLastCell.classList.remove('snake');
+        if(newHead[0] === applePosition[0] && newHead[1] === applePosition[1]){
+            snake.forEach(cell => {
+                const snakeCell = document.querySelector(`[data-row='${cell[1]}'][data-col='${cell[0]}']`);
+                snakeCell.classList.add('snake');
+                snakeCell.classList.remove('apple');
+            })
+            applePosition = null;
+            addApple();
+        }else{
+            let lastCell = snake.pop();
+            const snakeLastCell = document.querySelector(`[data-row='${lastCell[1]}'][data-col='${lastCell[0]}']`);
+            snakeLastCell.classList.remove('snake');
 
-        snake.forEach(cell => {
-            const snakeCell = document.querySelector(`[data-row='${cell[1]}'][data-col='${cell[0]}']`);
-            snakeCell.classList.add('snake')
-        })
+            snake.forEach(cell => {
+                const snakeCell = document.querySelector(`[data-row='${cell[1]}'][data-col='${cell[0]}']`);
+                snakeCell.classList.add('snake')
+            })
+        }
+        setTimeout(startGame, 400);
     };
 
-    setInterval(drowSnake, 600)
-    drowSnake()
-    // drowSnake()
-
-
-
-    })
+    if(!applePosition) addApple();
+    startGame();
+})
