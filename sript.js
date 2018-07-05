@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let applePosition;
     //initial heading 1 - N, 2 - E, 3 - S, 4 - w
     let direction = 1;
+    let gameSpeed = 400;
 
     for( let i = 0; i < cellsY ; i++ ){
         const tr = document.createElement("tr");
@@ -93,6 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             applePosition = null;
             addApple();
+            if(snake.length % 5 === 0) gameSpeed /= 1.25;
         }else{
             let lastCell = snake.pop();
             const snakeLastCell = document.querySelector(`[data-row='${lastCell[1]}'][data-col='${lastCell[0]}']`);
@@ -103,7 +105,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 snakeCell.classList.add('snake')
             })
         }
-        setTimeout(startGame, 400);
+
+        // if(snake.length % 5 === 0) gameSpeed /= 1.25;
+        setTimeout(startGame, gameSpeed);
     };
 
     if(!applePosition) addApple();
