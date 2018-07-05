@@ -10,15 +10,20 @@ section{
 }
 
 h1{
-    padding: 4% 6%;
+    padding: 4% 22% 2%;
 }
 
 .game-board{
     margin: auto;
+    padding-bottom: 4%;
 }
 
 .board-cell{
     background: #999;
     width: 1.6vw;
     height: 1.6VW;
+}
+
+.snake{
+    background: #fff;
 }
