@@ -1,0 +1,24 @@
+body{
+    background: #000;
+}
+
+section{
+    max-width: 1000px;
+    margin: auto;
+    font-family: Verdana, Tahoma, sans-serif;
+    background: #666;
+}
+
+h1{
+    padding: 4% 6%;
+}
+
+.game-board{
+    margin: auto;
+}
+
+.board-cell{
+    background: #999;
+    width: 1.6vw;
+    height: 1.6VW;
+}
