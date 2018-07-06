@@ -53,8 +53,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function addApple(){
         applePosition = applePositionXY();
+        if(collisionTest(applePosition[0], applePosition[1], snake)){
+            applePosition = null;
+            addApple();
+            return false;
+        }
         const apple = document.querySelector(`[data-row='${applePosition[1]}'][data-col='${applePosition[0]}']`);
         apple.classList.add('apple');
+    }
+
+    //if snake crashes into itself or the edge of the board === gameover
+    function collisionTest(x,y,array){
+        for(const val of array){
+            if(val[0] === x && val[1] === y){
+                return true;
+            }
+        }
+        return false;
     }
 
     function startGame () {
@@ -78,8 +93,12 @@ document.addEventListener('DOMContentLoaded', function() {
 }
         let newHead = [snakeHeadX, snakeHeadY];
 
-        //game over if the snake hits the wall
-        if(newHead[0] < 0 || newHead[0] >= cellsX || newHead[1] < 0 || newHead[1] >=cellsY){
+        //game over if the snake hits the wall or crashes into itself
+        if(newHead[0] < 0 ||
+            newHead[0] >= cellsX ||
+            newHead[1] < 0 ||
+            newHead[1] >=cellsY ||
+            collisionTest(newHead[0],newHead[1],snake)){
             // function game over to implement
             location.reload()
         }
@@ -106,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
             })
         }
 
-        // if(snake.length % 5 === 0) gameSpeed /= 1.25;
         setTimeout(startGame, gameSpeed);
     };
 

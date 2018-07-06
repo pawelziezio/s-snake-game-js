@@ -3,7 +3,7 @@ body{
 }
 
 section{
-    max-width: 1000px;
+    max-width: 960px;
     margin: auto;
     font-family: Verdana, Tahoma, sans-serif;
     background: #666;
@@ -20,8 +20,8 @@ h1{
 
 .board-cell{
     background: #999;
-    width: 1.8vw;
-    height: 1.8VW;
+    width: 1.6vw;
+    height: 1.6VW;
 }
 
 .snake{
