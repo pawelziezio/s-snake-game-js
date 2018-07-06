@@ -40,7 +40,12 @@ h1{
     background: #fff;
 }
 .apple{
-    background: rgb(197, 19, 19);
+    background: url(img/001-apple-4.png) center center no-repeat, #999;
+    background-size:80% 80%;
+}
+.bomb{
+    background: url(img/012-risk-skull.png)center center no-repeat, #999;
+    background-size:80% 80%;
 }
 
 td{

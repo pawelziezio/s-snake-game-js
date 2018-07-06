@@ -9,23 +9,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //initil position
     const snake = [ [10,10], [11,10] ];
-    let applePosition;
+    const bombsArray = [];
+    let applePosition = null;
     //initial heading 1 - N, 2 - E, 3 - S, 4 - w
     let direction = 1;
     let gameSpeed = 400;
     let clickable = true;
 
-    for( let i = 0; i < cellsY ; i++ ){
-        const tr = document.createElement("tr");
-        for( let j = 0; j < cellsX ; j++ ){
-            const td = document.createElement('td');
-            td.classList.add('board-cell');
-            td.dataset.row = i;
-            td.dataset.col = j;
-            tr.appendChild(td);
+    function getReadyBoard(){
+        for( let i = 0; i < cellsY ; i++ ){
+            const tr = document.createElement("tr");
+            for( let j = 0; j < cellsX ; j++ ){
+                const td = document.createElement('td');
+                td.classList.add('board-cell');
+                td.dataset.row = i;
+                td.dataset.col = j;
+                tr.appendChild(td);
+            }
+            gameBoard.appendChild(tr);
         }
-        gameBoard.appendChild(tr);
     }
+
+    getReadyBoard();
 
     // get direction
     document.addEventListener('keydown', getDirection)
@@ -85,6 +90,18 @@ document.addEventListener('DOMContentLoaded', function() {
         gameScore.innerText = snake.length;
     }
 
+    function addBomb(){
+        bombPosition = randomPositionXY();
+        if(collisionTest(bombPosition[0], bombPosition[1], snake) || collisionTest(bombPosition[0], bombPosition[1], [applePosition]) ){
+            bombPosition = null;
+            addBomb();
+            return false;
+        }
+        const bomb = document.querySelector(`[data-row='${bombPosition[1]}'][data-col='${bombPosition[0]}']`);
+        bomb.classList.add('bomb');
+        bombsArray.push(bombPosition);
+    }
+
     function startGame () {
         let snakeHeadX = snake[0][0];
         let snakeHeadY = snake[0][1];
@@ -111,7 +128,8 @@ document.addEventListener('DOMContentLoaded', function() {
             newHead[0] >= cellsX ||
             newHead[1] < 0 ||
             newHead[1] >=cellsY ||
-            collisionTest(newHead[0],newHead[1],snake)){
+            collisionTest(newHead[0],newHead[1],snake) ||
+            collisionTest(newHead[0],newHead[1],bombsArray) ){
             // function game over to implement
             location.reload()
         }
@@ -144,4 +162,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if(!applePosition) addApple();
     startGame();
+    setInterval( addBomb, 30000);
 })
