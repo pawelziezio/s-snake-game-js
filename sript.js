@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     const gameBoard = document.querySelector('.game-board');
+    const gameScore = document.querySelector('.game__score-value');
+
 
     const cellsX = 20;
     const cellsY = 20;
@@ -11,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //initial heading 1 - N, 2 - E, 3 - S, 4 - w
     let direction = 1;
     let gameSpeed = 400;
+    let clickable = true;
 
     for( let i = 0; i < cellsY ; i++ ){
         const tr = document.createElement("tr");
@@ -28,23 +31,29 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', getDirection)
 
     function getDirection(e){
-        switch(e.keyCode) {
-            case 37:
-                if(direction !== 2) direction = 4;
-                break;
-            case 38:
-                if(direction !== 3) direction = 1;
-                break;
-            case 39:
-                if(direction !== 4) direction = 2;
-                break;
-            case 40:
-                if(direction !== 1) direction = 3;
-                break;
+        if(clickable){
+            switch(e.keyCode) {
+                case 37:
+                    if(direction !== 2) direction = 4;
+                    clickable = false;
+                    break;
+                case 38:
+                    if(direction !== 3) direction = 1;
+                    clickable = false;
+                    break;
+                case 39:
+                    if(direction !== 4) direction = 2;
+                    clickable = false;
+                    break;
+                case 40:
+                    if(direction !== 1) direction = 3;
+                    clickable = false;
+                    break;
+            }
         }
     }
 
-    function applePositionXY(){
+    function randomPositionXY(){
         return [
             Math.floor(Math.random()*cellsX),
             Math.floor(Math.random()*cellsY)
@@ -52,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addApple(){
-        applePosition = applePositionXY();
+        applePosition = randomPositionXY();
         if(collisionTest(applePosition[0], applePosition[1], snake)){
             applePosition = null;
             addApple();
@@ -70,6 +79,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         return false;
+    }
+
+    function showScore(){
+        gameScore.innerText = snake.length;
     }
 
     function startGame () {
@@ -113,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             applePosition = null;
             addApple();
+            showScore();
             if(snake.length % 5 === 0) gameSpeed /= 1.25;
         }else{
             let lastCell = snake.pop();
@@ -124,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 snakeCell.classList.add('snake')
             })
         }
-
+        clickable = true;
         setTimeout(startGame, gameSpeed);
     };
 

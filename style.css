@@ -9,8 +9,20 @@ section{
     background: #666;
 }
 
+header{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: .5% 3%;
+}
+
 h1{
-    padding: 4% 22% 2%;
+    font-size: 2.4rem;
+}
+
+.game__score-value{
+    font-size: 2.4rem;
+    font-weight: bold;
 }
 
 .game-board{
