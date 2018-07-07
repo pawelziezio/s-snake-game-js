@@ -67,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function addApple(){
         applePosition = randomPositionXY();
-        if(collisionTest(applePosition[0], applePosition[1], snake)){
+        if(collisionTest(applePosition[0], applePosition[1], snake) ||
+            collisionTest(applePosition[0], applePosition[1], bombsArray) ){
             applePosition = null;
             addApple();
             return false;
@@ -123,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
 }
         let newHead = [snakeHeadX, snakeHeadY];
 
-        //game over if the snake hits the wall or crashes into itself
+        //game over if the snake hits the wall or crashes into itself or into bomb
         if(newHead[0] < 0 ||
             newHead[0] >= cellsX ||
             newHead[1] < 0 ||

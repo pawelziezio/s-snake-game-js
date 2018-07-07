@@ -1,3 +1,7 @@
+*{
+    transition: all .1s;
+}
+
 body{
     background: #000;
 }
@@ -40,12 +44,12 @@ h1{
     background: #fff;
 }
 .apple{
-    background: url(img/001-apple-4.png) center center no-repeat, #999;
-    background-size:80% 80%;
+    background: url(img/004-fruit.png) center center no-repeat, #999;
+    background-size:85%;
 }
 .bomb{
     background: url(img/012-risk-skull.png)center center no-repeat, #999;
-    background-size:80% 80%;
+    background-size:85%;
 }
 
 td{
