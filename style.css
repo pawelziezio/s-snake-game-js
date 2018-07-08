@@ -1,3 +1,34 @@
+:root{
+    --cell-size: 26px;
+    --fonnt-size: 16px;
+    --header-width: 590px;
+    font-size: 16px;
+}
+@media only screen and (max-width: 850px), (max-height: 680px) {
+    :root{
+        --cell-size: 24px;
+        --header-width: 560px;
+        font-size: 14px;
+    }
+}
+@media only screen and (max-width: 650px), (max-height: 650px) {
+    :root{
+        --cell-size: 20px;
+        --header-width: 480px;
+    }
+}
+@media only screen and (max-width: 550px), (max-height: 580px)  {
+    :root{
+        --cell-size: 18px;
+        --header-width: 400px;
+    }
+}
+@media only screen and (max-width: 550px), (max-height: 520px)  {
+    :root{
+        --cell-size: 16px;
+    }
+}
+
 *{
     transition: all .1s;
     font-family: Verdana, Tahoma, sans-serif;
@@ -6,6 +37,7 @@
 body{
     background: #000;
     background: #666;
+
 }
 
 section{
@@ -16,13 +48,13 @@ header{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 590px;
-    margin: auto;
+    max-width: var(--header-width);
+    margin: 1.6% auto 0;
 }
 
 h1{
     font-size: 2.4rem;
-    margin-bottom: 4%;
+    margin: 3% 0 -6px;
 }
 
 p{
@@ -30,7 +62,7 @@ p{
 }
 
 .game__score-value{
-    font-size: 2.4rem;
+    font-size: 3rem;
     font-weight: bold;
     width: 40px;
 }
@@ -41,8 +73,12 @@ p{
 
 .board-cell{
     background: #999;
-    width: 26px;
-    height: 26px;
+    width: var(--cell-size);
+    height: var(--cell-size);
+}
+
+.game__score{
+    margin-bottom: 0px;
 }
 
 .snake{
@@ -66,13 +102,13 @@ td{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 1.6% 3%;
+    padding: 1.4% 3%;
     background: blue;
     font-size: 1.4rem;
     font-weight: bold;
     outline: none;
     border: none;
-    opacity: .9;
+    opacity: .8;
     border-radius: 4px;
     cursor: pointer;
     line-height: 2.6rem;

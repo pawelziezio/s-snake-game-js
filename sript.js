@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
             collisionTest(newHead[0],newHead[1],snake) ||
             collisionTest(newHead[0],newHead[1],bombsArray) ){
             // function game over to implement
-            // location.reload()
+            location.reload()
         }
 
         snake.unshift(newHead);
