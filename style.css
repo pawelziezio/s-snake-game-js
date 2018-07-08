@@ -1,43 +1,48 @@
 *{
     transition: all .1s;
+    font-family: Verdana, Tahoma, sans-serif;
 }
 
 body{
     background: #000;
+    background: #666;
 }
 
 section{
-    max-width: 960px;
-    margin: auto;
-    font-family: Verdana, Tahoma, sans-serif;
-    background: #666;
+    margin: 0 auto;
 }
 
 header{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding: .5% 3%;
+    max-width: 590px;
+    margin: auto;
 }
 
 h1{
     font-size: 2.4rem;
+    margin-bottom: 4%;
+}
+
+p{
+    margin-bottom: 0;
 }
 
 .game__score-value{
     font-size: 2.4rem;
     font-weight: bold;
+    width: 40px;
 }
 
 .game-board{
     margin: auto;
-    padding-bottom: 4%;
 }
 
 .board-cell{
     background: #999;
-    width: 1.6vw;
-    height: 1.6VW;
+    width: 26px;
+    height: 26px;
 }
 
 .snake{
@@ -55,3 +60,31 @@ h1{
 td{
     border-radius: 2px;
 }
+
+.game__start-button{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1.6% 3%;
+    background: blue;
+    font-size: 1.4rem;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    opacity: .9;
+    border-radius: 4px;
+    cursor: pointer;
+    line-height: 2.6rem;
+    transition: all .2s;
+}
+
+.game__start-button:hover{
+    top: 49.8%;
+    box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.75);
+}
+.game__start-button:active{
+    top: 50%;
+    box-shadow: none;
+}
+

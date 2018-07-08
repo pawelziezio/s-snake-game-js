@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const gameBoard = document.querySelector('.game-board');
     const gameScore = document.querySelector('.game__score-value');
+    const startButton = document.querySelector('.game__start-button');
 
 
     const cellsX = 20;
@@ -132,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
             collisionTest(newHead[0],newHead[1],snake) ||
             collisionTest(newHead[0],newHead[1],bombsArray) ){
             // function game over to implement
-            location.reload()
+            // location.reload()
         }
 
         snake.unshift(newHead);
@@ -161,7 +162,13 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(startGame, gameSpeed);
     };
 
-    if(!applePosition) addApple();
-    startGame();
-    setInterval( addBomb, 30000);
+    startButton.addEventListener('click',function(e){
+        e.preventDefault();
+
+        startButton.style.opacity = "0";
+        setTimeout(function(){startButton.style.display = "none"}, 1000);
+        if(!applePosition) addApple();
+        startGame();
+        setInterval( addBomb, 30000);
+    })
 })
