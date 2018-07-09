@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const gameoverTable = document.querySelector('.game-over__table');
 
     let addBombInterval;
-    let startGameInterval;
+    let startGameTimeout;
+    let isGameover = false;
 
     const cellsX = 20;
     const cellsY = 20;
@@ -120,8 +121,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function gameover(){
         const score = snake.length;
-        clearInterval(addBombInterval);
-        clearInterval(startGameInterval);
+        clearInterval( addBombInterval );
+        isGameover = true;
 
 
         let results = [];
@@ -141,8 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentDate = new Date();
 
         const currentDateText = leadingZero(currentDate.getDate()) +
-            ":" + leadingZero(currentDate.getMonth()+1) +
-            ":" + currentDate.getFullYear();
+            "." + leadingZero(currentDate.getMonth()+1) +
+            "." + currentDate.getFullYear();
 
         const currentHourText = leadingZero(currentDate.getHours()) +
             ':' + leadingZero(currentDate.getMinutes()) +
@@ -162,15 +163,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             localStorage.results = JSON.stringify(results);
             showTable(results);
+
         }else{
+
             lastResult.push(score);
             lastResult.push(currentDateText);
             lastResult.push(currentHourText);
             localStorage.results = JSON.stringify([lastResult]);
             showTable([lastResult]);
+
         }
 
-        console.log('game over in end')
         gameoverScore.innerText = score;
         gameoverBoard.style.display = 'block';
         gameoverBoard.style.opacity = .85;
@@ -217,10 +220,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 snakeCell.classList.add('snake');
                 snakeCell.classList.remove('apple');
             })
+
             applePosition = null;
             addApple();
             showScore();
             if(snake.length % 5 === 0) gameSpeed /= 1.25;
+
         }else if(newHead[0] >= 0 && newHead[0] < cellsX && newHead[1] >= 0 && newHead[1] < cellsY){
             let lastCell = snake.pop();
             const snakeLastCell = document.querySelector(`[data-row='${lastCell[1]}'][data-col='${lastCell[0]}']`);
@@ -233,6 +238,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         clickable = true;
+        if(!isGameover){
+            startGameTimeout = setTimeout(startGame, gameSpeed);
+        }
     }
 
 
@@ -245,7 +253,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if(!applePosition) addApple();
         startGame();
 
-        startGameInterval = setInterval(startGame, gameSpeed);
         addBombInterval = setInterval( addBomb, 30000);
     })
 
@@ -264,12 +271,13 @@ document.addEventListener('DOMContentLoaded', function() {
         direction = 1;
         gameSpeed = 400;
         clickable = true;
+        isGameover = false;
 
         // new game board without old class
         gameBoard.innerHTML = ''
         getReadyBoard();
 
-        // start new game 
+        // start new game
         startButton.click();
         showScore();
     })
