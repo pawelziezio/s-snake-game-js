@@ -10,7 +10,7 @@
 </head>
 <body>
     <section>
-        <header>
+        <header class="game__header">
             <h1>SNAKE</h1>
             <p class='game__score'>
                 <span class='game__score-text'>score:</span>
@@ -19,6 +19,20 @@
         </header>
         <table class="game-board"></table>
         <button class="game__start-button">START<br>NEW GAME</button>
+        <div class="game-over__board">
+            <header class="game-over__header">
+                <h3>GAME OVER</h3>
+                <div>
+                    <span class="game-over__text">score:</span>
+                    <span class="game-over__score"></span>
+                </div>
+            </header>
+            <section class="game-over__results">
+                <h3>TOP TEN</h3>
+                <table class="game-over__table"></table>
+                <button class="game-over__start-button">START NEW GAME</button>
+            </section>
+        </div>
     </section>
 </body>
 </html>

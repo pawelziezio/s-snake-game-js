@@ -3,19 +3,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const gameBoard = document.querySelector('.game-board');
     const gameScore = document.querySelector('.game__score-value');
     const startButton = document.querySelector('.game__start-button');
+    const gameoverStartButton = document.querySelector('.game-over__start-button');
+    const gameoverBoard = document.querySelector('.game-over__board');
+    const gameoverScore = document.querySelector('.game-over__score');
+    const gameoverTable = document.querySelector('.game-over__table');
 
+    let addBombInterval;
+    let startGameInterval;
 
     const cellsX = 20;
     const cellsY = 20;
 
     //initil position
-    const snake = [ [10,10], [11,10] ];
-    const bombsArray = [];
+    let snake = [ [10,10], [11,10] ];
+    let bombsArray = [];
     let applePosition = null;
     //initial heading 1 - N, 2 - E, 3 - S, 4 - w
     let direction = 1;
     let gameSpeed = 400;
     let clickable = true;
+
 
     function getReadyBoard(){
         for( let i = 0; i < cellsY ; i++ ){
@@ -32,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     getReadyBoard();
+
 
     // get direction
     document.addEventListener('keydown', getDirection)
@@ -59,12 +67,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     function randomPositionXY(){
         return [
             Math.floor(Math.random()*cellsX),
             Math.floor(Math.random()*cellsY)
         ]
     }
+
 
     function addApple(){
         applePosition = randomPositionXY();
@@ -78,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
         apple.classList.add('apple');
     }
 
+
     //if snake crashes into itself or the edge of the board === gameover
     function collisionTest(x,y,array){
         for(const val of array){
@@ -88,9 +99,11 @@ document.addEventListener('DOMContentLoaded', function() {
         return false;
     }
 
+
     function showScore(){
         gameScore.innerText = snake.length;
     }
+
 
     function addBomb(){
         bombPosition = randomPositionXY();
@@ -103,6 +116,66 @@ document.addEventListener('DOMContentLoaded', function() {
         bomb.classList.add('bomb');
         bombsArray.push(bombPosition);
     }
+
+
+    function gameover(){
+        const score = snake.length;
+        clearInterval(addBombInterval);
+        clearInterval(startGameInterval);
+
+
+        let results = [];
+        const lastResult = [];
+
+        function leadingZero(i) {
+            return (i < 10)? '0'+i : i;
+        }
+
+        function showTable(arr){
+            let tempArr = arr.map( (item, index) =>{
+                return `<tr><td>${index+1+'.'}</td><td>${item[0]}</td><td>${item[1]}</td><td>${item[2]}</td></tr>`
+            });
+            gameoverTable.innerHTML = `<tr><td>${''}</td><td>${'score'}</td><td>${'date'}</td><td>${'hour'}</td></tr>${tempArr.join(' ')}`;
+        }
+
+        const currentDate = new Date();
+
+        const currentDateText = leadingZero(currentDate.getDate()) +
+            ":" + leadingZero(currentDate.getMonth()+1) +
+            ":" + currentDate.getFullYear();
+
+        const currentHourText = leadingZero(currentDate.getHours()) +
+            ':' + leadingZero(currentDate.getMinutes()) +
+            ':' + leadingZero(currentDate.getSeconds());
+
+        if(localStorage.results){
+            results = JSON.parse(localStorage.results)
+
+            lastResult.push(score);
+            lastResult.push(currentDateText);
+            lastResult.push(currentHourText);
+
+            if(results[ (results.length - 1) ][0] < lastResult[0] || results.length < 10 ){
+                results.push(lastResult)
+                results.sort( (a, b) => b[0] - a[0] );
+                if( results.length>10 ) results.pop();
+            }
+            localStorage.results = JSON.stringify(results);
+            showTable(results);
+        }else{
+            lastResult.push(score);
+            lastResult.push(currentDateText);
+            lastResult.push(currentHourText);
+            localStorage.results = JSON.stringify([lastResult]);
+            showTable([lastResult]);
+        }
+
+        console.log('game over in end')
+        gameoverScore.innerText = score;
+        gameoverBoard.style.display = 'block';
+        gameoverBoard.style.opacity = .85;
+    }
+
 
     function startGame () {
         let snakeHeadX = snake[0][0];
@@ -132,8 +205,8 @@ document.addEventListener('DOMContentLoaded', function() {
             newHead[1] >=cellsY ||
             collisionTest(newHead[0],newHead[1],snake) ||
             collisionTest(newHead[0],newHead[1],bombsArray) ){
-            // function game over to implement
-            location.reload()
+            // location.reload()
+            gameover();
         }
 
         snake.unshift(newHead);
@@ -148,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
             addApple();
             showScore();
             if(snake.length % 5 === 0) gameSpeed /= 1.25;
-        }else{
+        }else if(newHead[0] >= 0 && newHead[0] < cellsX && newHead[1] >= 0 && newHead[1] < cellsY){
             let lastCell = snake.pop();
             const snakeLastCell = document.querySelector(`[data-row='${lastCell[1]}'][data-col='${lastCell[0]}']`);
             snakeLastCell.classList.remove('snake');
@@ -158,17 +231,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 snakeCell.classList.add('snake')
             })
         }
+
         clickable = true;
-        setTimeout(startGame, gameSpeed);
-    };
+    }
+
 
     startButton.addEventListener('click',function(e){
         e.preventDefault();
 
         startButton.style.opacity = "0";
         setTimeout(function(){startButton.style.display = "none"}, 1000);
+
         if(!applePosition) addApple();
         startGame();
-        setInterval( addBomb, 30000);
+
+        startGameInterval = setInterval(startGame, gameSpeed);
+        addBombInterval = setInterval( addBomb, 30000);
     })
+
+
+    gameoverStartButton.addEventListener('click',function(e){
+        e.preventDefault();
+
+        gameoverBoard.style.opacity = "0";
+        setTimeout(function(){gameoverBoard.style.display = "none"}, 1000);
+
+        //initil position
+        snake = [ [10,10], [11,10] ];
+        bombsArray = [];
+        applePosition = null;
+        //initial heading 1 - N, 2 - E, 3 - S, 4 - w
+        direction = 1;
+        gameSpeed = 400;
+        clickable = true;
+
+        // new game board without old class
+        gameBoard.innerHTML = ''
+        getReadyBoard();
+
+        // start new game 
+        startButton.click();
+        showScore();
+    })
+
 })
