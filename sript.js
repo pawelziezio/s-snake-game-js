@@ -152,9 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if(localStorage.results){
             results = JSON.parse(localStorage.results)
 
-            lastResult.push(score);
-            lastResult.push(currentDateText);
-            lastResult.push(currentHourText);
+            lastResult.push(score, currentDateText, currentHourText);
 
             if(results[ (results.length - 1) ][0] < lastResult[0] || results.length < 10 ){
                 results.push(lastResult)
@@ -165,10 +163,8 @@ document.addEventListener('DOMContentLoaded', function() {
             showTable(results);
 
         }else{
+            lastResult.push(score, currentDateText, currentHourText);
 
-            lastResult.push(score);
-            lastResult.push(currentDateText);
-            lastResult.push(currentHourText);
             localStorage.results = JSON.stringify([lastResult]);
             showTable([lastResult]);
 
