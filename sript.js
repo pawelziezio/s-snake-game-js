@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cellsY = 20;
 
     //initil position
-    let snake = [ [10,10], [11,10] ];
+    let snake = [ [10,10] ];
     let bombsArray = [];
     let applePosition = null;
     //initial heading 1 - N, 2 - E, 3 - S, 4 - w
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(function(){gameoverBoard.style.display = "none"}, 1000);
 
         //initil position
-        snake = [ [10,10], [11,10] ];
+        snake = [ [10,10] ];
         bombsArray = [];
         applePosition = null;
         //initial heading 1 - N, 2 - E, 3 - S, 4 - w
